@@ -1,0 +1,2 @@
+SENDER = ""
+PASSWORD = ""
