@@ -7,12 +7,13 @@ import time
 import smtplib
 import sys
 from email.mime.text import MIMEText
+
 from config import *
 
 list_clear = 0
 
 
-def validate_ip(s):  # Проверка на парвильно записанный ip
+def validate_ip(s):
     a = s.split('.')
     if len(a) != 4:
         return False
@@ -112,7 +113,7 @@ def add_ip(ip, port):
             f.write(ip_port + '\n')
         f.close()
     else:
-        for i in range(5100):
+        for i in range(65535):
             potoc = threading.Thread(target=scan_port, args=(ip, i, 0))
             potoc.start()
         potoc.join()
@@ -131,7 +132,7 @@ def scan_ip(ip_1, ip_2):  # Вызывает пинг на диапазон ад
     ip_list = f.read().split('\n')
     f.close()
     for ip in ip_list:
-        for i in range(5100):
+        for i in range(65535):
             potoc = threading.Thread(target=scan_port, args=(ip, i, 0))
             potoc.start()
         potoc.join()
@@ -165,7 +166,7 @@ def scan(ip_1, ip_2):
     print(ip_new)
 
     for ip in ip_new:
-        for i in range(5100):
+        for i in range(65535):
             potoc = threading.Thread(target=scan_port, args=(ip, i, 1))
             potoc.start()
         potoc.join()
@@ -191,7 +192,6 @@ def scan(ip_1, ip_2):
         print(send_email(message=str('Незарегистрированные порты не обнаружены')))
     else:
         print(send_email(message=str("Неизвестный порт(ы):" + str(a))))
-
 
 def send_email(
         message):  # Модуль отправки почтового сообщения с адресса segrkoh@gmail.com на адресса указанные в файле mail.txt
@@ -296,7 +296,7 @@ while (1):
         while (1):
             print('Введите порт (Порт = 0, запустит скан всех портов):')
             port = input()
-            if port.isdigit() and (int(port) >= 0 and int(port) <= 5100):
+            if port.isdigit() and (int(port) >= 0 and int(port) <= 65535):
                 port = int(port)
                 break
             else:
